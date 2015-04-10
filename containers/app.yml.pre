@@ -9,3 +9,4 @@ volumes:
    host: /var/docker/shared
    guest: /shared
 env:
+ DISCOURSE_DB_SOCKET: ""
