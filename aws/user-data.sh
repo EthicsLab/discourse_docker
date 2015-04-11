@@ -22,7 +22,7 @@ cd /var/docker
 git clone http://github.com/ethicslab/discourse_docker .
 
 cp containers/app.yml.pre containers/app.yml
-sed -r 's/^([^=])+=(.*)$/ - \1: \2/g' /tmp/env >> containers/app.yml
+sed -r 's/^([^=]+)=(.*)$/ \1: \2/g' /tmp/env >> containers/app.yml
 
 ./launcher bootstrap app
 ./launcher start app
