@@ -13,11 +13,9 @@ echo "deb https://get.docker.io/ubuntu docker main" > /etc/apt/sources.list.d/do
 curl https://s3-us-west-2.amazonaws.com/ethicslab-support/ddbconfig.py > /usr/local/bin/ddbconfig
 chmod 0755 /usr/local/bin/ddbconfig
 
-DOCKERHUB_USER=gtethicslab
-DOCKERHUB_PASSWORD=\$mgF5rN53BiIw.]J
-DOCKERHUB_EMAIL=ethicslab@georgetown.edu
-DOCKERHUB_VERSION=latest
 APP=discourse
+DOCKER_IMAGE_URL = https://s3-us-west-2.amazonaws.com/ethicslab-support/discourse-docker-image.tar.gz
+DOCKER_IMAGE_HASH = 43845baa9f06
 
 /usr/local/bin/ddbconfig -a $APP > /tmp/env
 
@@ -28,8 +26,7 @@ done
 
 DOCKER0_IP=$(ifconfig docker0 | egrep -o 'inet addr:([^ ]+)' | cut -d: -f2)
 
-# Log into dockerhub
-docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD -e $DOCKERHUB_EMAIL
+curl -sS $DOCKER_IMAGE_URL | gunzip -f | docker load
 
 # Run our app container dockerhub is hosting
-docker run -d --restart=always --env-file /tmp/env -e LANG=en_US.UTF-8 -e RAILS_ENV=production -e UNICORN_WORKERS=3 -e UNICORN_SIDEKIQS=1 -e RUBY_GC_MALLOC_LIMIT=40000000 -e RUBY_HEAP_MIN_SLOTS=800000 -e DISCOURSE_DB_SOCKET="" -e DOCKER_HOST_IP=$DOCKER0_IP -d -v /var/discourse/shared:/shared --name app -t -p 80:80 "$DOCKERHUB_USER/$(echo $APP | sed 's/_/-/g'):$DOCKERHUB_VERSION" /sbin/boot
+docker run -d --restart=always --env-file /tmp/env -e LANG=en_US.UTF-8 -e RAILS_ENV=production -e UNICORN_WORKERS=3 -e UNICORN_SIDEKIQS=1 -e RUBY_GC_MALLOC_LIMIT=40000000 -e RUBY_HEAP_MIN_SLOTS=800000 -e DISCOURSE_DB_SOCKET="" -e DOCKER_HOST_IP=$DOCKER0_IP -d -v /var/discourse/shared:/shared --name app -t -p 80:80 $DOCKER_IMAGE_HASH /sbin/boot
