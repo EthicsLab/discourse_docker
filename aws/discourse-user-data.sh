@@ -14,8 +14,8 @@ curl https://s3-us-west-2.amazonaws.com/ethicslab-support/ddbconfig.py > /usr/lo
 chmod 0755 /usr/local/bin/ddbconfig
 
 APP=discourse
-DOCKER_IMAGE_URL = https://s3-us-west-2.amazonaws.com/ethicslab-support/discourse-docker-image.tar.gz
-DOCKER_IMAGE_HASH = 43845baa9f06
+DOCKER_IMAGE_URL=https://s3-us-west-2.amazonaws.com/ethicslab-support/discourse-docker-image.tar.gz
+DOCKER_IMAGE_HASH=43845baa9f06
 
 /usr/local/bin/ddbconfig -a $APP > /tmp/env
 
